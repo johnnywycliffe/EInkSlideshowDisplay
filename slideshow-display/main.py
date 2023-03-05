@@ -3,6 +3,7 @@
 import os
 import time
 import argparse
+import random
 import RPi.GPIO as GPIO
 from subprocess import call
 from PIL import Image
@@ -10,7 +11,7 @@ from inky import Inky7Colour
 from inky.inky_uc8159 import CLEAN
 
 # State variables
-loop = [True, 0]  # Looping var, index
+state = {"loop": True, "index": 0, "rand": False}
 # Image list
 image_list = []
 # Argument parser
@@ -19,8 +20,9 @@ parser.add_argument('-d', '--delay', type=int, help="Length of time between chan
                                                     "Default is 300 seconds. Min time is 15 seconds")
 parser.add_argument('-p', '--path', type=str, help="Folder containing images to display. Default is "
                                                    "'slideshow-display/images'.")
-parser.add_argument('-s', '-sat', type=float, help="How deep the saturation is set on the screen. Values "
-                                                   "between 0 - 1.0, default is 0.5.")
+parser.add_argument('-s', '--sat', type=float, help="How deep the saturation is set on the screen. Values "
+                                                    "between 0 - 1.0, default is 0.5.")
+parser.add_argument('-r', '--random', action="store_true", help="If set, loads images in a random order")
 # Display init
 inky = Inky7Colour()
 # A, B, C, D GPIO Pins
@@ -43,11 +45,11 @@ def handle_button(pressed_pin: BUTTONS):
         print("Next image")
         show_image(image_list)
     elif pressed_pin == 16:  # Set display to constantly loop
-        if loop[0]:
+        if state["loop"]:
             print("Auto off")
         else:
             print("Auto on")
-        loop[0] = not loop[0]
+        state["loop"] = not state["loop"]
     elif pressed_pin == 24:  # Shutdown Pi
         print("Shutting down")
         call("sudo shutdown --poweroff", shell=True)
@@ -93,6 +95,7 @@ def get_images(directory: str, images: list):
         path = directory + "/" + filename
         if os.path.isfile(path):
             images.append(path)
+    images.sort()
     return len(images)
 
 
@@ -103,13 +106,16 @@ def show_image(directory: list, sat: float = 0.5):
     :param sat: Saturation value
     :return: None
     """
-    image = Image.open(directory[loop[1]])
+    image = Image.open(directory[state["index"]])
     resized_image = image.resize(inky.resolution)
     inky.set_image(resized_image, saturation=sat)
     inky.show()
-    loop[1] += 1
-    if loop[1] >= img_list_len:
-        loop[1] = 0
+    if state["random"]:
+        state["index"] = random.randint(0, img_list_len - 1)
+    else:
+        state["index"] += 1
+        if state["index"] >= img_list_len:
+            state["index"] = 0
 
 
 if __name__ == '__main__':
@@ -123,8 +129,8 @@ if __name__ == '__main__':
         print("Image delay set to {}".format(image_delay))
     else:
         image_delay = 300
-    if args.s:
-        image_sat = clamp(args.s, 0.0, 1.0)
+    if args.sat:
+        image_sat = clamp(args.sat, 0.0, 1.0)
         print("Saturation set to {}".format(image_sat))
     else:
         image_sat = 0.5
@@ -133,6 +139,7 @@ if __name__ == '__main__':
         print("Image path set to {}".format(image_path))
     else:
         image_path = "slideshow-display/images"
+    state["random"] = args.random
     # Initialize
     img_list_len = get_images(image_path, image_list)
     start_time = time.time() - float(image_delay)
@@ -141,7 +148,7 @@ if __name__ == '__main__':
         print("No images to show!")
         quit()
     while True:
-        if loop[0] and time.time() > (start_time + float(image_delay)):
+        if state["loop"] and time.time() > (start_time + float(image_delay)):
             show_image(image_list)
             start_time = time.time()
         else:

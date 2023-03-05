@@ -95,7 +95,7 @@ sudo apt-get upgrade
 curl https://get.pimoroni.com/inky | bash
 ```
 
-to verify install, run 
+To verify install, run:
 
 ```
 cd /home/pi/Pimoroni/inky/examples/7color
@@ -136,6 +136,8 @@ The script is now installed. See the sections below to see how to use the script
 
 To run the script, type `./slideshow-display/main.py`
 
+By default, images are displayed in alphebetical order.
+
 There are some arguments that can be invoked:
 
 | Arg | Description | Default |
@@ -143,7 +145,8 @@ There are some arguments that can be invoked:
 | -h, --help | Displays help message | N/A |
 | -d, --delay | Adjusts the number of seconds between image changes. Minimum is 15 seconds. | 300 seconds |
 | -p, --path | Changes the path to load the images from. | images/ |
-| -s, --saturation | CHanges the saturation of the images. Between 0-1.0 | 0.5 |
+| -s, --sat | Changes the saturation of the images. Between 0-1.0 | 0.5 |
+| -r, --random | Loads pictures in a random order | False |
 
 Once the script is running, the four buttons on the side of the display (A, B, C, D) can be used to control the display.
 
