@@ -89,12 +89,14 @@ def get_images(directory: str, images: list):
     if not os.path.exists(directory):
         print("Path '{}' doesn't exist!".format(directory))
         quit()
-    for filename in os.listdir(directory):
-        if filename == "README.md":
-            continue
-        path = directory + "/" + filename
-        if os.path.isfile(path):
-            images.append(path)
+
+    for p, d, f in os.walk(directory):
+        for file in f:
+            if file == "README.md":
+                continue
+            path = directory + "/" + file
+            if os.path.isfile(path):
+                images.append(path)
     images.sort()
     return len(images)
 

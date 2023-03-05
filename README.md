@@ -176,5 +176,4 @@ Argumants can be added after the line as normal, I.E. `@reboot ./slideshow-displ
 ## Known issues
 
 - There is no file verification for files inside of the images folder.
-- Folders inside of the images folder are not checked.
 
