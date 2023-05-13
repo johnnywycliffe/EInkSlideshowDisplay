@@ -9,24 +9,22 @@ This project was designed to display some images in a well lit location isolated
 Necessary:
 - Raspberry Pi 3B+ (Pi 0 will also work, not tested with Pi 4)
 - [Inky Impressions 5.7" 7-colour display](https://shop.pimoroni.com/products/inky-impression-5-7)
-- SD Card, 8 GB
+- SD Card, 8 GB 
+- ***OR***
+- [Inky Impressions 4" 7-colour display](https://shop.pimoroni.com/products/inky-impression-4)
 - [20 x 2 header extender](https://core-electronics.com.au/2x20-socket-riser-header-for-raspberry-pi-hats-and-bonnets.html) (Should be included)
-- Standoffs (Should be included)
-- USB Micro cable
-
-Optional:
+- USB Micro cable, 90 degrees [Example](https://www.amazon.com/dp/B0045JHJDS?ref=ppx_yo2ov_dt_b_product_details&th=1)
 - 3D printer (for case)
-- [90' USB power cable](https://www.amazon.com/StarTech-com-91cm-Micro-USB-Cable/dp/B0045JHJDS/ref=sr_1_4?keywords=micro+usb+cable+90+degree&qid=1677981577&sr=8-4)
 - [USB power bank](https://www.amazon.com/Anker-PowerCore-Technology-High-Capacity-Compatible/dp/B07S829LBX/ref=sr_1_3?crid=3VLH6HB1MXUXX&keywords=anker+20000&qid=1677981712&sprefix=anker+20000%2Caps%2C80&sr=8-3)
-- Mouse/Keybaord/Screen for using Raspberry Pi OS with desktop
+- Mouse/Keyboard/Screen for using Raspberry Pi OS with desktop
 
 ### Hardware install
 
 ***WARNING!*** Inky screens are glass. Be careful when pressing anything into the screen, setting it down on a surface, etc. Do not remove the screen protector until final install.
 
-Thread the standoffs into the back of the display in the four spots. Break the captan tape with the thread of the standoff.
+Thread the standoffs into the back of the display in the four spots. Break the Kaptan tape with the thread of the standoff, the point of a knife, or just scrape it off.
 
-Put the header extander on the Pi, then flip over and press onto the back of the screen gently. The standoffs should line up with the holes in the Pi. Screw the Pi down to secure it.
+Put the header extender on the Pi, then flip over and press onto the back of the screen gently. The standoffs should line up with the holes in the Pi. Screw the Pi down to secure it.
 
 Once the SD Card is programmed, insert it into the SD Card slot, and then power the Pi up by plugging in the power cable.
 
@@ -34,7 +32,7 @@ See the Case folder for how to assemble the case.
 
 ## Making images
 
-The Pimoroni Impressions 5.7" 7-Colour E-Ink display has a resolution of 600 x 448 pixels. The code as written will squash any image down to fit this resolution, resulting in stretched looking images if that are not in the correct aspect ratio.
+The Pimoroni Impressions 5.7" 7-Colour E-Ink display has a resolution of 600 x 448 pixels. The code as written will squash any image down to fit this resolution, resulting in stretched looking images if that are not in the correct aspect ratio. The 4" screen is the same aside from the fact it has a resolution of 640 X 400.
 
 Multi-color E-ink displays can only display one color per pixel out of the seven colors, so test the images before using the display.
 
@@ -87,7 +85,7 @@ You have successfully logged into the Pi.
 
 ### Install
 
-If you haven't logged into the Pi, log in. Ensure the Pi is connected to the internet. Call the following commands to intall the modules for the 7 color E-ink display.
+If you haven't logged into the Pi, log in. Ensure the Pi is connected to the internet. Call the following commands to install the modules for the 7 color E-ink display.
 
 ```
 sudo apt-get update
@@ -111,13 +109,14 @@ Once installed, type `exit`to return to the default terminal. Run the following 
 ```
 mkdir slideshow-display
 cd slideshow-display
-curl https://github.com/johnnywycliffe/EInkSlideshowDisplay.git
+git init
+git clone https://github.com/johnnywycliffe/EInkSlideshowDisplay.git
 ```
 
 Look into the "slideshow-display" directory. Load any images you have prepared into the "images" directory, and then run the following command:
 
 ```
-scp -r slideshow-display/ pi@display-pi.local
+scp -r slideshow-display/ pi@display-pi.local:~/
 ```
 
 You will have to type in the password.
@@ -136,7 +135,7 @@ The script is now installed. See the sections below to see how to use the script
 
 To run the script, type `./slideshow-display/main.py`
 
-By default, images are displayed in alphebetical order.
+By default, images are displayed in alphabetical order.
 
 There are some arguments that can be invoked:
 
@@ -159,7 +158,7 @@ Please give the Pi two minutes to power down before unplugging it.
 
 ## Run automatically at boot
 
-Once you are satified with the functionality of the script, set it to automatically load.
+Once you are satisfied with the functionality of the script, set it to automatically load.
 
 Once SSH'd into the Pi:
 
@@ -169,9 +168,9 @@ crontab -e
 
 Choose the editor of your choice, assuming nano (1).
 
-In the crontab file add `@reboot ./slideshow-display/main.py` then press "ctrl+x" to close nano, then y to save the changes, then enter to save the cron file.
+In the crontab file add `@reboot python3 slideshow-display/main.py` then press "ctrl+x" to close nano, then "y" to save the changes, then enter to save the cron file.
 
-Argumants can be added after the line as normal, I.E. `@reboot ./slideshow-display/main.py -d 30 -s 0.7`
+Arguments can be added after the line as normal, I.E. `@reboot python3 slideshow-display/main.py -d 30 -s 0.7`
 
 ## Known issues
 
