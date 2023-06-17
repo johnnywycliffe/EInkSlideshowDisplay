@@ -11,11 +11,9 @@ from inky import Inky7Colour
 from inky.inky_uc8159 import CLEAN
 
 # State variables
-state = {"loop": True, "index": 0, "rand": False}
+state = {"loop": True, "index": 0, "rand": False, "ap_active": False}
 # Image list
 image_list = []
-# AP State
-ap_active = False
 # Argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--delay', type=int, help="Length of time between changing pictures in auto mode. "
@@ -31,7 +29,6 @@ inky = Inky7Colour()
 BUTTONS = [5, 6, 16, 24]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
 
 def handle_button(pressed_pin: BUTTONS):
     """ Handles button inputs.
@@ -53,12 +50,14 @@ def handle_button(pressed_pin: BUTTONS):
             print("Auto on")
         state["loop"] = not state["loop"]
     elif pressed_pin == 24:  # toggle AP_Active
-        if ap_active:
+        if state["ap_active"]:
             print("Activating AP")
+            call(['sh', "slideshow-display/ap_off.sh"])
         else:
             print("Deactivating AP")
-
-        call("sudo shutdown --poweroff", shell=True)
+            call(['sh',"slideshow-display/ap_update.sh"])
+        state["ap_active"] = not state["ap_active"]
+        #call("sudo shutdown --poweroff", shell=True)
     else:
         # Something went wrong
         print("ERROR: Bad pin number entered. Somehow.")
