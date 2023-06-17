@@ -14,6 +14,8 @@ from inky.inky_uc8159 import CLEAN
 state = {"loop": True, "index": 0, "rand": False}
 # Image list
 image_list = []
+# AP State
+ap_active = False
 # Argument parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--delay', type=int, help="Length of time between changing pictures in auto mode. "
@@ -50,10 +52,13 @@ def handle_button(pressed_pin: BUTTONS):
         else:
             print("Auto on")
         state["loop"] = not state["loop"]
-    elif pressed_pin == 24:  # Shutdown Pi
-        print("Shutting down")
+    elif pressed_pin == 24:  # toggle AP_Active
+        if ap_active:
+            print("Activating AP")
+        else:
+            print("Deactivating AP")
+
         call("sudo shutdown --poweroff", shell=True)
-        quit()
     else:
         # Something went wrong
         print("ERROR: Bad pin number entered. Somehow.")
