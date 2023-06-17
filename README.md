@@ -23,10 +23,6 @@ Two sets of instructions are provided, one with details and one if you just need
 - Update main.py to turn on and off AP mode with the "D" button
 - Make it so AP mode isn't on at boot
 - Make a GitHub release and provide instructions to pull files down in section 3.5 and 4.5
-- Create ap_setup.sh
-- Create ap_setup.conf (Configuration for AP)
-- Provide steps for changing ap_setup.conf
-- Make a redo script for the AP, so it can be re-initialized without a wipe.
 
 ## How to Use
 

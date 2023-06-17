@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 source config-files/ap_setup.conf # Load config file
 
-# From https://stackoverflow.com/questions/50413579/bash-convert-netmask-in-cidr-notation
 netmask_to_CIDR () {
    bits=0
    x=0$( printf '%o' ${1//./ } )
@@ -14,8 +13,8 @@ netmask_to_CIDR () {
 netmask_to_CIDR "$NETMASK"
 CIDR=$bits
 
-sudo apt install dnsmasq hostapd  # Install required programs
-sudo systemctl stop dnsmasq       # Stop both new systems
+# Stop systems
+sudo systemctl stop dnsmasq
 sudo systemctl stop hostapd
 
 # Set up static IP
@@ -26,8 +25,7 @@ interface wlan0
 END
 sudo service dhcpcd restart
 
-# Configure DHCP server
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+# Set up DHCP
 tee -a /etc/dnsmasq.conf << END
 interface=wlan0
 dhcp-range=$IP_RANGE_LOW,$IP_RANGE_HIGH,$NETMASK,24h
@@ -47,11 +45,8 @@ wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP CCMP
 rsn_pairwise=CCMP
 END
-tee -a /etc/default/hostapd << END
-DAEMON_CONF="/etc/hostapd/hostapd.conf"
-END
 
-# Start AP
+# Start it all back up
 sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
 sudo systemctl start hostapd
