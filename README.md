@@ -10,20 +10,22 @@ Two sets of instructions are provided, one with details and one if you just need
 
 ## Sections
 
-1. [TODOs](#todos-)
+1. [TODOs](#todos-fixmes-)
 2. [How to use](#how-to-use)
 3. [Hardware](#hardware)
 4. [Installation](#installation)
-5. [Installation explanation](#installation-verbose)
+5. [Installation --verbose](#installation---verbose)
 6. [Making images](#making-images)
-7. [Known Issues](#known-issues)
 
-## TODOs:
+## TODOs-FIXMEs:
+
+### TODO:
+
+- Clear screen after every few images (more testing needed)
+
+### FIXME:
 
 - main.py assumes AP is off, doesn't check
-- Make it so AP mode isn't on at boot
-- Better image file handling
-- Add "AP in use" image to let user know it's active
 
 ## How to Use
 
@@ -86,13 +88,15 @@ Move on to [Installation](#installation) or [Installation w/ explanation](#insta
 6. Run AP installer
 7. Load images by connecting to AP
 
-## Installation verbose
+## Installation --verbose
 
 ### Step 1: Setup Raspberry Pi OS
 
 This tutorial assumes a headless Raspberry Pi plugged into a linux computer with SSH installed. On windows, PuTTY can be used.
 
 Install Raspberry Pi OS Lite by following the instructions [Here](https://www.raspberrypi.com/software/).
+
+Tested to work on Raspberry Pi OS 32 bit 2023-50-03 release of Bullseye.
 
 Recommended Options:
 - Operating System: Raspberry Pi OS Lite
@@ -310,10 +314,3 @@ The Pimoroni Impressions 4" 7-Colour E-Ink display has a resolution of 640 x 400
 Multicolor E-ink displays can only display one color per pixel out of the seven colors, so test the images before using the display.
 
 It is good practice to check each image before it is slid into a full rotation to ensure it displays nicely.
-
-## Known issues
-
-- There is no file verification for files inside the 'images' folder.
-- Auto mode doesn't clear between all images
-- AP mode doesn't ever deactivate
-

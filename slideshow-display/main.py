@@ -4,6 +4,8 @@ import os
 import time
 import argparse
 import random
+
+import PIL
 import RPi.GPIO as GPIO
 from subprocess import call
 from PIL import Image
@@ -30,6 +32,7 @@ BUTTONS = [5, 6, 16, 24]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTONS, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+
 def handle_button(pressed_pin: BUTTONS):
     """ Handles button inputs.
 
@@ -52,12 +55,16 @@ def handle_button(pressed_pin: BUTTONS):
     elif pressed_pin == 24:  # toggle AP_Active
         if state["ap_active"]:
             print("Activating AP")
+            state["loop"] = False
             call(['sh', "slideshow-display/ap_off.sh"])
+            image = Image.open("slideshow-display/ap_on.png")
+            resized_image = image.resize(inky.resolution)
+            inky.set_image(resized_image, saturation=0.7)
+            inky.show()
         else:
             print("Deactivating AP")
-            call(['sh',"slideshow-display/ap_update.sh"])
+            call(['sh', "slideshow-display/ap_update.sh"])
         state["ap_active"] = not state["ap_active"]
-        #call("sudo shutdown --poweroff", shell=True)
     else:
         # Something went wrong
         print("ERROR: Bad pin number entered. Somehow.")
@@ -112,7 +119,19 @@ def show_image(directory: list, sat: float = 0.5):
     :param sat: Saturation value
     :return: None
     """
-    image = Image.open(directory[state["index"]])
+    start_index = state["index"]
+    while True:
+        try:
+            image = Image.open(directory[state["index"]])
+        except PIL.UnidentifiedImageError:
+            state["index"] += 1
+            if state["index"] >= img_list_len:
+                state["index"] = 0
+            if start_index == state["index"]:
+                # A full loop has passed, no valid files
+                print("No valid files in folder")
+                quit()
+        break
     resized_image = image.resize(inky.resolution)
     inky.set_image(resized_image, saturation=sat)
     inky.show()
