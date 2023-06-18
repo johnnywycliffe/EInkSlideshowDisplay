@@ -10,14 +10,14 @@ Two sets of instructions are provided, one with details and one if you just need
 
 ## Sections
 
-1. [TODOs](#todos-fixmes-)
+1. [TODOs](#todos)
 2. [How to use](#how-to-use)
 3. [Hardware](#hardware)
 4. [Installation](#installation)
 5. [Installation --verbose](#installation---verbose)
 6. [Making images](#making-images)
 
-## TODOs-FIXMEs:
+## TODOs
 
 ### TODO:
 
@@ -69,7 +69,7 @@ Additionally:
 3. Flip over and press Pi onto the back of the screen gently.
 4. If using standoffs, screw down the Pi securely.
 
-Move on to [Installation](#installation) or [Installation w/ explanation](#installation --verbose) to program the SD card.
+Move on to [Installation](#installation) or [Installation --verbose](#installation---verbose) to program the SD card.
 
 ## Installation
 
@@ -307,7 +307,7 @@ To change the settings, delete pictures, or run other programs:
    2. `cd ~/slideshow-diplay/config-files` to reconfigure AP
    3. `cd ~/slideshow-display/` for main script
 
-#### Making images
+## Making images
 
 The Pimoroni Impressions 4" 7-Colour E-Ink display has a resolution of 640 x 400 pixels. The code as written will squash any image in acceptable format down to fit this resolution, resulting in stretched images if source image not in the correct aspect ratio. The 5.7" screen is the same aside from the fact it has a resolution of 600 X 440.
 
