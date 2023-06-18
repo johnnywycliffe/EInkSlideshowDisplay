@@ -53,17 +53,18 @@ def handle_button(pressed_pin: BUTTONS):
             print("Auto on")
         state["loop"] = not state["loop"]
     elif pressed_pin == 24:  # toggle AP_Active
-        if state["ap_active"]:
+        if not state["ap_active"]:
             print("Activating AP")
             state["loop"] = False
-            call(['sh', "slideshow-display/ap_off.sh"])
+            call(['sh', "slideshow-display/ap_update.sh"])
             image = Image.open("slideshow-display/ap_on.png")
             resized_image = image.resize(inky.resolution)
             inky.set_image(resized_image, saturation=0.7)
             inky.show()
         else:
             print("Deactivating AP")
-            call(['sh', "slideshow-display/ap_update.sh"])
+            #clear()
+            call(['sh', "slideshow-display/ap_off.sh"])
         state["ap_active"] = not state["ap_active"]
     else:
         # Something went wrong

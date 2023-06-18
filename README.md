@@ -224,7 +224,7 @@ Since this installation guide is assuming a headless install, the only way to co
 Make sure to edit config-files/ap_setup.conf before running the script and changing the SSID, passphrase, and static IPs if desired. These can be changed, but only if recalled and the `ap_update.sh` script is run.
 
 ```
-nano ~slideshow-display/config-files/ap_setup.conf
+nano ~/slideshow-display/config-files/ap_setup.conf
 ```
 
 Once configured, run the following:
@@ -233,7 +233,7 @@ Once configured, run the following:
 chmod +x ~/slideshow-display/ap_setup.sh
 chmod +x ~/slideshow-display/ap_update.sh
 chmod +x ~/slideshow-display/ap_off.sh
-sudo .~/slideshow-display/ap_setup.sh
+sudo ./slideshow-display/ap_setup.sh
 ```
 
 The SSH will hang and disconnect. There are a few libraries it is installing,
