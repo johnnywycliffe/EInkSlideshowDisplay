@@ -20,9 +20,10 @@ Two sets of instructions are provided, one with details and one if you just need
 
 ## TODOs:
 
-- Update main.py to turn on and off AP mode with the "D" button
+- main.py assumes AP is off, doesn't check
 - Make it so AP mode isn't on at boot
-- Make a GitHub release and provide instructions to pull files down in section 3.5 and 4.5
+- Better image file handling
+- Add "AP in use" image to let user know it's active
 
 ## How to Use
 
@@ -78,7 +79,7 @@ Move on to [Installation](#installation) or [Installation w/ explanation](#insta
 3. SSH into Pi
 4. Run apt update/upgrade + install the following:
    - `curl https://get.pimoroni.com/inky | bash`
-   - FIXME: Add pi download instructions
+   - `clone https://github.com/johnnywycliffe/EInkSlideshowDisplay.git` and move slideshow-display folder to ~/ 
 5. Setup scripts to run at boot
    - `chmod +x main.py`
    - Add `@reboot python3 slideshow-display/main.py -r` to `crontab -e`
@@ -159,14 +160,14 @@ The screen may have ghosting. Run the clear command a few more times if you like
 
 To install the slideshow and support script:
 
-FIXME: This is for host computer, not Pi
-
 ```
-mkdir EInkDisplay
-cd EInkDisplay
+mkdir temp
+cd temp
 git init
 git clone https://github.com/johnnywycliffe/EInkSlideshowDisplay.git
-scp -r slideshow-display/ pi@display-pi.local:~/
+mv slideshow-display/ ~/
+cd ..
+rm -r temp
 ```
 
 For testing (linux):
@@ -183,9 +184,7 @@ Once the command completes, SSH into the Pi once more.
 Now that the files are loaded onto the Pi, they need to be initialized.
 
 ```
-cd slideshow-display/
-chmod +x main.py
-cd ..
+chmod +x slideshow-display/main.py
 ```
 
 To run the script, type `./slideshow-display/main.py`
@@ -229,6 +228,7 @@ Once configured, run the following:
 ```
 chmod +x ~/slideshow-display/ap_setup.sh
 chmod +x ~/slideshow-display/ap_update.sh
+chmod +x ~/slideshow-display/ap_off.sh
 sudo .~/slideshow-display/ap_setup.sh
 ```
 
@@ -278,9 +278,12 @@ For a breakdown of what this all means, visit [This Link](https://raspberrypi-gu
 
 ### Step 7: Load images/edit program
 
+These instructions are how to connect to the display from this point forward, now that all the code is running.
+
 To add images once the AP has been initialized:
 
-1. Press the "D" button on the side fo the device to start AP mode
+1. Press the "D" button on the side of the device to start AP mode
+   - **CAVEAT!** THe very first time the AP script is run, the AP will already be initialized. Skip step 1. 
 2. Once the AP can be found, connect a computer, phone, or other device to it.
 3. On the connecting device (*NOT* the Pi):
    1. Create a folder named "images" somewhere easy to find 
